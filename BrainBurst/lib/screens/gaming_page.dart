@@ -8,7 +8,7 @@ class GamingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 852,
-      width: 393,
+      width: double.infinity,
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment(0.39, 0.92),
@@ -33,9 +33,9 @@ class GamingPage extends StatelessWidget {
             text: 'TIC TAC TOE',
           ),
           ScanningIndexTile(
-            fontsizewid: 19,
+            fontsizewid: 16,
             icon: Container(
-              width: 50,
+              width: 50, 
               height: 55,
               decoration: const ShapeDecoration(
                 color: Color(0xFFF399DA),

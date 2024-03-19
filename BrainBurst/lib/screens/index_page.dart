@@ -37,40 +37,38 @@ class _IndexPageState extends State<IndexPage> {
     final branchProvider = context.watch<BranchProvider>();
     final branchIndex = branchProvider.branchIndex;
     // auth();
-    return SafeArea(
-      child: Scaffold(
-        body: branchIndex == 0
-            ? _widgetOptions.elementAt(_selectedIndex)
-            : branchProvider.getBranchWidget(),
-        bottomNavigationBar: BottomNavigationBar(
-          items: <BottomNavigationBarItem>[
-            for (int i = 0; i < _widgetOptions.length; i++)
-              BottomNavigationBarItem(
-                icon: Image.asset(
-                  _iconPaths[i],
-                  width: 24,
-                  height: 24,
-                ),
-                label: '_________',
+    return Scaffold(
+      body: branchIndex == 0
+          ? _widgetOptions.elementAt(_selectedIndex)
+          : branchProvider.getBranchWidget(),
+      bottomNavigationBar: BottomNavigationBar(
+        items: <BottomNavigationBarItem>[
+          for (int i = 0; i < _widgetOptions.length; i++)
+            BottomNavigationBarItem(
+              icon: Image.asset(
+                _iconPaths[i],
+                width: 24,
+                height: 24,
               ),
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Colors.white,
-          selectedLabelStyle: const TextStyle(
-            decoration: TextDecoration.underline,
-            decorationThickness: 8,
-          ),
-          showSelectedLabels: true,
-          showUnselectedLabels: false,
-          onTap: (index) {
-            setState(() {
-              _selectedIndex = index;
-            });
-            branchProvider.changeBranchIndex(0);
-          },
-          backgroundColor: Colors.white,
-          type: BottomNavigationBarType.fixed,
+              label: '_________',
+            ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.white,
+        selectedLabelStyle: const TextStyle(
+          decoration: TextDecoration.underline,
+          decorationThickness: 8,
         ),
+        showSelectedLabels: true,
+        showUnselectedLabels: false,
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+          branchProvider.changeBranchIndex(0);
+        },
+        backgroundColor: Colors.white,
+        type: BottomNavigationBarType.fixed,
       ),
     );
   }
