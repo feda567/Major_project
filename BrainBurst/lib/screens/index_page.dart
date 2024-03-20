@@ -39,7 +39,7 @@ class _IndexPageState extends State<IndexPage> {
     // auth();
     return Scaffold(
       body: branchIndex == 0
-          ? _widgetOptions.elementAt(_selectedIndex)
+          ? SingleChildScrollView(child: _widgetOptions.elementAt(_selectedIndex))
           : branchProvider.getBranchWidget(),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
