@@ -1,5 +1,5 @@
 class Api {
-  static const String ip = '192.168.1.104';
+  static const String ip = '192.168.1.43';
   static const String baseUrl = 'http://$ip:8000/';  
   static var token = "";         
   static List<Map<String, dynamic>> chapters = []; 
@@ -7,14 +7,18 @@ class Api {
     token = newtoken;
   }   
   static String user= "";
+  static String userId="1";
   static bool logedIn = false;
-  login(String newuser) {
+  login(String newuser,String newuserid) {
     user = newuser;
+    userId=newuserid;
     logedIn = true;
     print("logged in");
+    print(userId);
   }
   logout() {
     user = "";
+    userId='';
     token = "";
     logedIn = false;
     print("logged out");

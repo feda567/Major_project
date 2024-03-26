@@ -285,6 +285,6 @@ void auth() async {
   print(response.body);
   print("auth");
   var a = jsonDecode(response.body);
-  Api().login(a['user']);
+  Api().login(a['user'],a["userid"]);
   // return response;
 }

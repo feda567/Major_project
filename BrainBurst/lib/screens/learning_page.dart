@@ -233,9 +233,43 @@ class LearningPageContent extends StatefulWidget {
 }
 
 class _LearningPageContentState extends State<LearningPageContent> {
+  List<bool> watched = [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ];
   @override
   Widget build(BuildContext context) {
     final branchProvider = context.watch<BranchProvider>();
+    List<Map<String, dynamic>> progresses;
+
+    
+    print('watched $watched');
+    setState(() {
+      fetchProgress().then((progress) {
+        progresses = progress;
+        print(' value ${progresses[2]['watched']}');
+        // watched = progresses[2]['watched']==true;
+        for (int i = 0; i < progresses.length; i++) {
+          print(' value ${progresses[i]['watched']}');
+          watched[i] = (progresses[i]['watched']);
+        }
+        print('watched after $watched');
+      });
+    
+    });
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -256,20 +290,21 @@ class _LearningPageContentState extends State<LearningPageContent> {
                   // Use the list of video URLs here
                   print(chapters[i]['link']);
                   print(chapters[i]['id']);
+
                   videoUrl = chapters[i]['link'];
                   videoIndex = chapters[i]['id'];
+                  uprogress({'video_id': i+1, 'user_id': Api.userId});  
                   branchProvider.changeBranchIndex(1);
                 }).catchError((error) {
                   // Handle error here
                   print('Error fetching video URLs: $error');
                 });
               },
-              child: LearningPageContentTile(index: i + 1, played: i < 2),
+              child: LearningPageContentTile(index: i + 1, played: watched[i]), 
             ),
         ],
-        
       ),
-    ); 
+    );
   }
 }
 
@@ -287,5 +322,49 @@ Future<List<Map<String, dynamic>>> fetchVideo() async {
     print('Request failed with status: ${response.statusCode}');
     // You might want to throw an exception here or handle the error in some way
     return []; // Return an empty list in case of failure
+  }
+}
+
+Future<List<Map<String, dynamic>>> fetchProgress() async {
+  String url = '${Api.baseUrl}progress?user_id=${Api.userId}';
+  final response = await http.get(Uri.parse(url));
+  print(url);
+  if (response.statusCode == 200) {
+    final data = response.body;
+    List<Map<String, dynamic>> progress =
+        json.decode(data).cast<Map<String, dynamic>>();
+    // print(progress);
+    return progress;
+  } else {
+    print('Request failed with status: ${response.statusCode}');
+    // You might want to throw an exception here or handle the error in some way
+    return []; // Return an empty list in case of failure
+  }
+}
+
+Future<String> uprogress(Map<String, dynamic> data) async {
+  var url = '${Api.baseUrl}uprogress'; // Include 'http://' or 'https://'
+  String body = json.encode(data);
+  print(url);
+
+  try {
+    var response = await http.post(
+      Uri.parse(url), // Use Uri.parse to create the Uri
+      body: body,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      var jsonResponse = json.decode(response.body);
+      return jsonResponse['Message'];
+    } else {
+      // Handle other status codes (e.g., 404, 500, etc.) if needed
+      return 'Error: ${response.statusCode}';
+    }
+  } catch (e) {
+    // Handle exceptions (e.g., network errors)
+    return 'Error: $e';
   }
 }

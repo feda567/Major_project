@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
-from .models import VideosDb
+from .models import VideosDb, ProgressDb
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -55,3 +55,12 @@ class VideoSerializer (serializers.ModelSerializer):
     class Meta:
         model = VideosDb
         fields = '__all__'
+
+
+class VideoProgressSerializer (serializers.ModelSerializer):
+    class Meta:
+        # model = ProgressDb.objects.filter(userid=get_user_model())
+        model = ProgressDb
+        fields = '__all__'
+
+
