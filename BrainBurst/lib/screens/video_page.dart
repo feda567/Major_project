@@ -18,8 +18,8 @@ class VideoPage extends StatelessWidget {
     return Container(
       // padding: const EdgeInsets.all(20),
       margin: const EdgeInsets.only(top: 30),
-      width: 393,
-      height: 852,
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
       color: Colors.white,
       child: Stack(
         children: [

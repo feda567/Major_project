@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:google_generative_ai/google_generative_ai.dart';
 
-class ImageProcess {
-  Future<String?> imageProcess(String path) async {
+class TextProcess {
+  Future<String?> textProcess(String path) async {
     // final apiKey = Platform.environment['AIzaSyCWMrbbfq_WL3iWaB-74ak-LlhYYU1e7e8'];
     const apiKey = 'AIzaSyCWMrbbfq_WL3iWaB-74ak-LlhYYU1e7e8';
 
@@ -19,7 +19,7 @@ class ImageProcess {
       final imageBytes = await File(path).readAsBytes();
 
       final prompt = TextPart(
-          "Identify the object in the image and display only the name of the image in one word.");
+          "Check weather the given text contains any malayalam letter or not if it contains only one malayalam letter first display the message true and then display only the letter in malayalam not in hindi and if it doesnt contain any malayalam letter diplay no letters is discoverd and if it contains more than onle letter display message that it contains more than one letter   ");
       final imagePart = DataPart('image/jpeg', imageBytes);
 
       final response = await model.generateContent([

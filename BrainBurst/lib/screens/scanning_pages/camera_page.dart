@@ -50,13 +50,31 @@ class _CameraPageState extends State<CameraPage> {
   }
 }
 
-String objectName = '';
-String objectNameInMalayalam = '';
 
 
-class CameraPreview extends StatelessWidget {
+class CameraPreview extends StatefulWidget {
   const CameraPreview({Key? key}) : super(key: key);
 
+  @override
+  State<CameraPreview> createState() => _CameraPreviewState();
+}
+
+class _CameraPreviewState extends State<CameraPreview> {
+  String objectName = '';
+  String objectNameInMalayalam = '';
+
+  Future<String> translateToMalayalam() async {
+    final translator = GoogleTranslator();
+
+    try {
+      Translation translation = await translator.translate(objectName, from: 'en', to: 'ml');
+        objectNameInMalayalam = translation.text;
+    } catch (error) {
+      print("Translation Error: $error");
+        objectNameInMalayalam = "Translation Error";
+    }
+    return objectNameInMalayalam;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,35 +86,46 @@ class CameraPreview extends StatelessWidget {
           print("::::::::::::::::::::::::::::::::: $path");
           if (path.contains('.jpg')) {
             showDialog(
-                context: context,
-                builder: (context) {
-                  return FutureBuilder<String?>(
-                    future: ImageProcess().imageProcess(path),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return CircularProgressIndicator();
-                      } else if (snapshot.hasError) {
-                        return Text('Error: ${snapshot.error}');
-                      } else {
-                        final result =
-                            snapshot.data ?? ''; // Using null-aware operator
-                        objectName =result ;
-                        translateToMalayalam();
-                        return AlertDialog(
-                          content: Column(
-                            children: [
-                          Image.file(File(path)),
-                              Text("In English$result"),
-                              // Text(objectName ),
-                              Text("In Malayalam $objectNameInMalayalam" ),
-                              
-                            ],
-                          ),
-                        );
-                      }
-                    },
-                  );
-                });
+              context: context,
+              builder: (context) {
+                return FutureBuilder<String?>(
+                  future: ImageProcess().imageProcess(path),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Scaffold(body: Center(
+                        
+                        child: SizedBox(height: 80,width: 80, child: CircularProgressIndicator(),)),);
+                    } else if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else {
+                      final result = snapshot.data ?? '';
+                      objectName = result;
+                      translateToMalayalam();
+                      return AlertDialog(
+                        content: Column(
+                          children: [
+                            Image.file(File(path)),
+                            Text("In English: $result"),
+                            FutureBuilder<String>(
+                              future: translateToMalayalam(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState == ConnectionState.waiting) {
+                                  return const Text("Translating...");
+                                } else if (snapshot.hasError) {
+                                  return Text('Translation Error: ${snapshot.error}');
+                                } else {
+                                  return Text("In Malayalam: ${snapshot.data ?? ''}");
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                  },
+                );
+              },
+            );
           }
         },
       ),
@@ -104,15 +133,6 @@ class CameraPreview extends StatelessWidget {
   }
 }
 
-void translateToMalayalam() async {
-  final translator = GoogleTranslator();
 
-  try {
-    Translation translation = await translator.translate(objectName, from: 'en', to: 'ml');
-    objectNameInMalayalam = translation.text;
-  } catch (error) {
-    print("Translation Error: $error");
-    objectNameInMalayalam =  "Translation Error";
-  }
-}
+
 
