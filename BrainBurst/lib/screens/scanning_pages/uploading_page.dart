@@ -1,8 +1,13 @@
 import 'dart:io';
+import 'package:brainburst/constants/api.dart';
+import 'package:brainburst/models/branch.dart';
+import 'package:brainburst/models/text_processs.dart';
+import 'package:brainburst/screens/learning_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 class UplaodingPage extends StatefulWidget {
   const UplaodingPage({Key? key}) : super(key: key);
@@ -28,37 +33,47 @@ class _UplaodingPageState extends State<UplaodingPage> {
     }
   }
 
+  // Future<void> _recognizeText() async {
+  //   if (imageFile == null) return;
+
+  //   final inputImage = InputImage.fromFile(imageFile!);
+  //   final textRecognizer = GoogleMlKit.vision.textRecognizer();
+  //   final text = await textRecognizer.processImage(inputImage);
+
+  //   String recognizedText = '';
+
+  //   for (TextBlock block in text.blocks) {
+  //     for (TextLine line in block.lines) {
+  //       // Check if the line contains Malayalam characters
+  //       if (line.text.contains(RegExp(r'[ം-ൿ]'))) {
+  //         recognizedText += line.text + '\n';
+  //       }
+  //       // recognizedText += line.text + '\n';
+  //     }
+  //   }
+
+  //   // Handle the recognized text here, you can update the UI with the text
+  //   print("Recognized Text: $recognizedText");
+  //   setState(() {
+  //     recognizedTextOut = recognizedText;
+  //   });
+
+  //   // Clean up resources
+  //   textRecognizer.close();
+  // }
+
   Future<void> _recognizeText() async {
     if (imageFile == null) return;
 
     final inputImage = InputImage.fromFile(imageFile!);
-    final textRecognizer = GoogleMlKit.vision.textRecognizer();
-    final text = await textRecognizer.processImage(inputImage);
 
     String recognizedText = '';
-
-    for (TextBlock block in text.blocks) {
-      for (TextLine line in block.lines) {
-        // Check if the line contains Malayalam characters
-        if (line.text.contains(RegExp(r'[ം-ൿ]'))) {
-          recognizedText += line.text + '\n';
-        }
-        // recognizedText += line.text + '\n';
-      }
-    }
-
-    // Handle the recognized text here, you can update the UI with the text
-    print("Recognized Text: $recognizedText");
-    setState(() {
-      recognizedTextOut = recognizedText;
-    });
-
-    // Clean up resources
-    textRecognizer.close();
   }
 
   @override
   Widget build(BuildContext context) {
+        final branchProvider = context.watch<BranchProvider>();
+
     return Container(
       height: 852,
       width: 393,
@@ -150,10 +165,9 @@ class _UplaodingPageState extends State<UplaodingPage> {
             ),
             child: Stack(
               children: [
-                if (imageFile == null)
-                  Image.asset('assets/scanning_page/ee1.png')
-                else
-                  Image.file(imageFile!),
+                if (imageFile != null)
+
+                Image.file(imageFile!),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -176,19 +190,69 @@ class _UplaodingPageState extends State<UplaodingPage> {
             ),
           ),
           const SizedBox(height: 30),
-          SizedBox(
-            height: 100,
-            child: Text(
-              'Recognized Text:\n$recognizedTextOut',
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 16,
-              ),
-              // softWrap:
-              //     true,
-              // overflow: TextOverflow.clip,
-            ),
-          )
+          FutureBuilder(
+              future: TextProcess().textProcess(imageFile?.path??''),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasData) {
+                    recognizedTextOut = snapshot.data.toString();
+                  }
+
+                  return Column(
+                    children: [
+                      SizedBox(
+                        height: 100,
+                        child: Text(
+                          recognizedTextOut,
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                          ),
+                          // softWrap:
+                          //     true,
+                          // overflow: TextOverflow.clip,
+                        ),
+                      ),
+                      ElevatedButton(onPressed: () {
+                fetchVideo().then((chapters) {
+                  // Use the list of video URLs here
+                  print(chapters[chapterIdNum-1]['link']);
+                  print(chapters[chapterIdNum-1]['id']);
+
+                  videoUrl = chapters[chapterIdNum-1]['link'];
+                  videoIndex = chapters[chapterIdNum-1]['id'];
+                  uprogress({'video_id': chapterIdNum, 'user_id': Api.userId});  
+                  branchProvider.changeBranchIndex(1);
+                }).catchError((error) {
+                  // Handle error here
+                  print('Error fetching video URLs: $error');
+                });
+              },child: Text("Go to Alphabet Page"),)
+                    ],
+                  );
+                } else {
+                  return const SizedBox(
+                      height: 80,
+                      width: 80,
+                      child: SizedBox(
+                          height: 80,
+                          width: 80,
+                          child: CircularProgressIndicator()));
+                }
+              }),
+          // SizedBox(
+          //   height: 100,
+          //   child: Text(
+          //     'Recognized Text:\n$recognizedTextOut',
+          //     style: const TextStyle(
+          //       color: Colors.black,
+          //       fontSize: 16,
+          //     ),
+          //     // softWrap:
+          //     //     true,
+          //     // overflow: TextOverflow.clip,
+          //   ),
+          // )
         ],
       ),
     );

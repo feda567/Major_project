@@ -20,8 +20,8 @@ class _IndexPageState extends State<IndexPage> {
 
   final List<Widget> _widgetOptions = <Widget>[
     const LearningPage(),
-    const ScanningIndex(), 
-    const GamingPage(), 
+    const ScanningIndex(),
+    const GamingPage(),
     const ProfilePage(),
   ];
 
@@ -36,39 +36,45 @@ class _IndexPageState extends State<IndexPage> {
   Widget build(BuildContext context) {
     final branchProvider = context.watch<BranchProvider>();
     final branchIndex = branchProvider.branchIndex;
-    // auth();
-    return Scaffold(
-      body: branchIndex == 0
-          ? SingleChildScrollView(child: _widgetOptions.elementAt(_selectedIndex))
-          : branchProvider.getBranchWidget(),
-      bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          for (int i = 0; i < _widgetOptions.length; i++)
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                _iconPaths[i],
-                width: 24,
-                height: 24,
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) {
+        branchProvider.changeBranchIndex(0);
+      },
+      child: Scaffold(
+        body: branchIndex == 0
+            ? SingleChildScrollView(
+                child: _widgetOptions.elementAt(_selectedIndex))
+            : branchProvider.getBranchWidget(),
+        bottomNavigationBar: BottomNavigationBar(
+          items: <BottomNavigationBarItem>[
+            for (int i = 0; i < _widgetOptions.length; i++)
+              BottomNavigationBarItem(
+                icon: Image.asset(
+                  _iconPaths[i],
+                  width: 24,
+                  height: 24,
+                ),
+                label: '_________',
               ),
-              label: '_________',
-            ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.white,
-        selectedLabelStyle: const TextStyle(
-          decoration: TextDecoration.underline,
-          decorationThickness: 8,
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.white,
+          selectedLabelStyle: const TextStyle(
+            decoration: TextDecoration.underline,
+            decorationThickness: 8,
+          ),
+          showSelectedLabels: true,
+          showUnselectedLabels: false,
+          onTap: (index) {
+            setState(() {
+              _selectedIndex = index;
+            });
+            branchProvider.changeBranchIndex(0);
+          },
+          backgroundColor: Colors.white,
+          type: BottomNavigationBarType.fixed,
         ),
-        showSelectedLabels: true,
-        showUnselectedLabels: false,
-        onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-          branchProvider.changeBranchIndex(0);
-        },
-        backgroundColor: Colors.white,
-        type: BottomNavigationBarType.fixed,
       ),
     );
   }

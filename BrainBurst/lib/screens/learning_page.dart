@@ -15,8 +15,8 @@ class LearningPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 393,
-      height: 852,
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment(0.39, 0.92),
@@ -24,13 +24,15 @@ class LearningPage extends StatelessWidget {
           colors: [Color(0xFFF7D5E5), Color(0x00FA99C8)],
         ),
       ),
-      child: const Column(
-        children: [
-          LearningPageLogo(),
-          LearningPageImage(),
-          LearningPageTitle(),
-          LearningPageContent(),
-        ],
+      child: const Center(
+        child: Column(
+          children: [
+            LearningPageLogo(),
+            LearningPageImage(),
+            LearningPageTitle(),
+            LearningPageContent(),
+          ],
+        ),
       ),
     );
   }

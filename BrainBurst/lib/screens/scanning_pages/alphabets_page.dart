@@ -1,3 +1,4 @@
+import 'package:brainburst/constants/api.dart';
 import 'package:brainburst/models/branch.dart';
 import 'package:brainburst/screens/scanning_pages/scanning_index.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +11,8 @@ class AlphabetsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 852,
-      width: 393,
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment(0.39, 0.92),
@@ -19,42 +20,40 @@ class AlphabetsPage extends StatelessWidget {
           colors: [Color(0xFFF7D5E5), Color(0x00FA99C8)],
         ),
       ),
-      child: Column(
-        children: [
-          const ScanningPageLogo(),
-          const SizedBox(
-            height: 20,
-          ),
-          SizedBox(
-            height: 520,
-            width: 340,
-            child: GridView.count(
-              crossAxisCount: 3,
-              children: const [
-                AlphabetBox('അ'),
-                AlphabetBox('ആ'),
-                AlphabetBox('ഇ'),
-                AlphabetBox('ഈ'),
-                AlphabetBox('ഉ'),
-                AlphabetBox('ഊ'),
-                AlphabetBox('ഋ'),
-                AlphabetBox('എ'),
-                AlphabetBox('ഏ'),
-                AlphabetBox('ഐ'),
-                AlphabetBox('ഒ'),
-                AlphabetBox('ഓ'),
-                AlphabetBox('ഔ'),
-                AlphabetBox('അം'),
-                AlphabetBox('അഃ'),
-                AlphabetBox('ക'),
-                AlphabetBox('ഖ'),
-                AlphabetBox('ഗ'),
-                AlphabetBox('ഘ'),
-                AlphabetBox('ങ'),
-              ],
+      child: Center(
+        child: Column(
+          children: [
+            const ScanningPageLogo(),
+            const SizedBox(
+              height: 20,
             ),
-          )
-        ],
+            SizedBox(
+              height: 520,
+              width: 340,
+              child: GridView.count(
+                crossAxisCount: 3,
+                children: const [
+                  AlphabetBox('അ',1),
+                  AlphabetBox('ആ',2),
+                  AlphabetBox('ഇ',3),
+                  AlphabetBox('ഈ',4),
+                  AlphabetBox('ഉ',5),
+                  AlphabetBox('ഊ',6),
+                  AlphabetBox('ഋ',7),
+                  AlphabetBox('എ',8),
+                  AlphabetBox('ഏ',9),
+                  AlphabetBox('ഐ',10),
+                  AlphabetBox('ഒ',11),
+                  AlphabetBox('ഓ',12),
+                  AlphabetBox('ഔ',13),
+                  AlphabetBox('അം',14),
+                  AlphabetBox('അഃ',15),
+                  
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -62,7 +61,8 @@ class AlphabetsPage extends StatelessWidget {
 
 class AlphabetBox extends StatelessWidget {
   final String data;
-  const AlphabetBox(this.data, {super.key});
+  final int num;
+  const AlphabetBox(this.data, this.num ,{super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -71,6 +71,7 @@ class AlphabetBox extends StatelessWidget {
     return InkWell(
       onTap: () {
         branchProvider.changeBranchIndex(3); 
+        chapterIdNum = num;
       },
       child: Container(
         width: 94,

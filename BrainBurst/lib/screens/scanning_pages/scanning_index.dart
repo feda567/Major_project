@@ -11,8 +11,8 @@ class ScanningIndex extends StatelessWidget {
     final branchProvider = context.watch<BranchProvider>();
 
     return Container(
-      height: 852,
-      width: 393,
+     width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment(0.39, 0.92),
