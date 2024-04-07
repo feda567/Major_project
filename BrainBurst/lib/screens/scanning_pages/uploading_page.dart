@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'package:brainburst/constants/api.dart';
+import 'package:brainburst/constants/colors.dart';
 import 'package:brainburst/models/branch.dart';
 import 'package:brainburst/models/text_processs.dart';
 import 'package:brainburst/screens/learning_page.dart';
+import 'package:brainburst/screens/reward_pages/correct_excellent_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
@@ -72,18 +74,12 @@ class _UplaodingPageState extends State<UplaodingPage> {
 
   @override
   Widget build(BuildContext context) {
-        final branchProvider = context.watch<BranchProvider>();
+    final branchProvider = context.watch<BranchProvider>();
 
     return Container(
       height: 852,
       width: 393,
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment(0.39, 0.92),
-          end: Alignment(-0.39, -0.92),
-          colors: [Color(0xFFF7D5E5), Color(0x00FA99C8)],
-        ),
-      ),
+      decoration: const BoxDecoration(color: Clr.lightBlue),
       child: Column(
         children: [
           Container(
@@ -125,20 +121,23 @@ class _UplaodingPageState extends State<UplaodingPage> {
                   width: double.infinity,
                   height: 52,
                   padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: const Padding(
-                    padding: EdgeInsets.only(left: 40),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 40),
                     child: Row(
                       children: [
-                        Text(
-                          'Click here',
-                          style: TextStyle(
-                            color: Color(0xFF136DC7),
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                            height: 0.12,
+                        InkWell(
+                          onTap: _getImage,
+                          child: const Text(
+                            'Click here',
+                            style: TextStyle(
+                              color: Color(0xFF136DC7),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              height: 0.12,
+                            ),
                           ),
                         ),
-                        Text(
+                        const Text(
                           ' to upload the അക്ഷരം',
                           style: TextStyle(
                             color: Color(0xFF1A524E),
@@ -165,25 +164,26 @@ class _UplaodingPageState extends State<UplaodingPage> {
             ),
             child: Stack(
               children: [
-                if (imageFile != null)
-
-                Image.file(imageFile!),
+                if (imageFile != null) Image.file(imageFile!),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    InkWell(
-                      onTap: () {
-                        setState(() {
-                          imageFile = null;
-                        });
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.all(5),
-                        decoration: const ShapeDecoration(
-                            color: Colors.red, shape: CircleBorder()),
-                        child: const Icon(Icons.close, color: Colors.white),
-                      ),
-                    ),
+                    imageFile == null
+                        ? Container()
+                        : InkWell(
+                            onTap: () {
+                              setState(() {
+                                imageFile = null;
+                              });
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.all(5),
+                              decoration: const ShapeDecoration(
+                                  color: Colors.red, shape: CircleBorder()),
+                              child:
+                                  const Icon(Icons.close, color: Colors.white),
+                            ),
+                          ),
                   ],
                 )
               ],
@@ -191,7 +191,8 @@ class _UplaodingPageState extends State<UplaodingPage> {
           ),
           const SizedBox(height: 30),
           FutureBuilder(
-              future: TextProcess().textProcess(imageFile?.path??''),
+              future: TextProcess()
+                  .textProcess(imageFile ?? File('assets/badges/badge1.png')),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasData) {
@@ -200,11 +201,11 @@ class _UplaodingPageState extends State<UplaodingPage> {
 
                   return Column(
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 100,
                         child: Text(
-                          recognizedTextOut,
-                          style: const TextStyle(
+                          " ",
+                          style: TextStyle(
                             color: Colors.black,
                             fontSize: 16,
                           ),
@@ -213,21 +214,39 @@ class _UplaodingPageState extends State<UplaodingPage> {
                           // overflow: TextOverflow.clip,
                         ),
                       ),
-                      ElevatedButton(onPressed: () {
-                fetchVideo().then((chapters) {
-                  // Use the list of video URLs here
-                  print(chapters[chapterIdNum-1]['link']);
-                  print(chapters[chapterIdNum-1]['id']);
+                      
+                      ElevatedButton(
+                        onPressed: () {
+                          print(recognizedTextOut+chapterIdNum.toString());  
+                           
+                          if (recognizedTextOut != chapterIdNum.toString()) {
+                            fetchVideo().then((chapters) {
+                              // Use the list of video URLs here
+                              print(chapters[chapterIdNum - 1]['link']);
+                              print(chapters[chapterIdNum - 1]['id']);
 
-                  videoUrl = chapters[chapterIdNum-1]['link'];
-                  videoIndex = chapters[chapterIdNum-1]['id'];
-                  uprogress({'video_id': chapterIdNum, 'user_id': Api.userId});  
-                  branchProvider.changeBranchIndex(1);
-                }).catchError((error) {
-                  // Handle error here
-                  print('Error fetching video URLs: $error');
-                });
-              },child: Text("Go to Alphabet Page"),)
+                              videoUrl = chapters[chapterIdNum - 1]['link'];
+                              videoIndex = chapters[chapterIdNum - 1]['id'];
+                              uprogress({
+                                'video_id': chapterIdNum,
+                                'user_id': Api.userId
+                              });
+                              branchProvider.changeBranchIndex(1);
+                            }).catchError((error) {
+                              // Handle error here
+                              print('Error fetching video URLs: $error');
+                            });
+                          } else if (recognizedTextOut ==
+                              chapterIdNum.toString()) {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const CorrectExcellent()));
+                          }
+                        },
+                        child: const Text("Check Answer"),
+                      )
                     ],
                   );
                 } else {

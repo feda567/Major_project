@@ -1,3 +1,4 @@
+import 'package:brainburst/constants/colors.dart';
 import 'package:brainburst/models/branch.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -107,7 +108,7 @@ class ScanningIndexTile extends StatelessWidget {
       width: 306,
       height: 109,
       decoration: ShapeDecoration(
-        color: Colors.white,
+        color: Clr.lightCyan, 
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
@@ -123,7 +124,7 @@ class ScanningIndexTile extends StatelessWidget {
             child: Text(
               text,
               style: GoogleFonts.markoOne(
-                color: Colors.black,
+                color: Clr.darkPurple,  
                 fontSize: fontsizewid,
                 fontWeight: FontWeight.w400,
                 height: 0,

@@ -1,5 +1,8 @@
+import 'package:brainburst/screens/index_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:brainburst/models/branch.dart';
 
 class BadgeEarn extends StatelessWidget {
   const BadgeEarn({super.key});
@@ -63,9 +66,12 @@ class NextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final branchProvider = context.watch<BranchProvider>();
+
     return InkWell(
       onTap: () {
-        Navigator.pop(context);
+        // branchProvider.changeBranchIndex(0);
+       Future.delayed(Duration.zero, () => branchProvider.changeBranchIndex(0));
       },
       child: Container(
         width: 224,

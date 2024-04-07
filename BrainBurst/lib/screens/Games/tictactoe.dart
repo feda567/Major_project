@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:brainburst/constants/colors.dart';
 import 'package:flutter/material.dart';
 
 enum Player { X, O, computer }
@@ -118,7 +119,7 @@ class _TicTacToePageState extends State<TicTacToePage> {
     return ElevatedButton(
       onPressed: () => _handleTap(index),
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.white,
+        backgroundColor: Clr.jade,
         foregroundColor: Colors.black,
         minimumSize: const Size(50, 50),
       ),
@@ -131,7 +132,9 @@ class _TicTacToePageState extends State<TicTacToePage> {
     String winner = _checkWinner();
 
     return Scaffold(
+      backgroundColor: Clr.lightBlue,
       appBar: AppBar(
+        backgroundColor: Clr.lightBlue,
         title: const Text('Tic Tac Toe'),
       ),
       body: Center(
@@ -179,7 +182,12 @@ class _TicTacToePageState extends State<TicTacToePage> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-                onPressed: _resetGame, child: const Text('Reset Game')),
+              onPressed: _resetGame,
+              child: const Text('Reset Game'),
+              style: const ButtonStyle(
+                backgroundColor: MaterialStatePropertyAll(Clr.lightCyan),
+              ),
+            ),
           ],
         ),
       ),

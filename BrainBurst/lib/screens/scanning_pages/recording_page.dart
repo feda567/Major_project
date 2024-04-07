@@ -1,5 +1,7 @@
+import 'package:brainburst/constants/colors.dart';
 import 'package:brainburst/screens/scanning_pages/scanning_index.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 class RecordingPage extends StatefulWidget {
@@ -36,11 +38,16 @@ class _RecordingPageState extends State<RecordingPage> {
                 onPressed: _listen,
                 child: Image.asset('assets/recording_page/recording_logo.png')),
           ),
-          Text(_isListening ? 'Listening...' : 'Start Listening'),
+          Text(_isListening ? 'Listening...' : 'Start Listening',style: GoogleFonts.inknutAntiqua( 
+                        color: Clr.darkSpringGreen, 
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        height: 0,
+                      ),),
           Text(
             _text,
             style: const TextStyle(
-              color: Colors.black,
+              color:Clr.darkPurple ,
               fontSize: 48,
               fontFamily: 'Marko One',
               fontWeight: FontWeight.w400,

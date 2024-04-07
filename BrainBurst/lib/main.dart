@@ -1,6 +1,7 @@
 import 'package:brainburst/models/branch.dart';
 import 'package:brainburst/screens/index_page.dart';
 import 'package:brainburst/screens/reward_pages/badge_earn.dart';
+import 'package:brainburst/screens/reward_pages/correct_excellent_page.dart';
 // import 'package:brainburst/screens/index_page.dart';
 import 'package:flutter/material.dart';
 import 'package:brainburst/screens/welcome_page.dart';
@@ -31,8 +32,9 @@ class MyApp extends StatelessWidget {
             },
           ),
         ),
-        // home: const IndexPage(),
+        // home: const CorrectExcellent(), 
         home: const WelcomePage(),
+        // home: const IndexPage(),
       ),
     );
   }

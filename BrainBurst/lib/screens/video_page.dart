@@ -1,3 +1,4 @@
+import 'package:brainburst/constants/colors.dart';
 import 'package:brainburst/models/branch.dart';
 import 'package:brainburst/screens/learning_page.dart';
 import 'package:brainburst/screens/reward_pages/badge_earn.dart';
@@ -20,23 +21,26 @@ class VideoPage extends StatelessWidget {
       margin: const EdgeInsets.only(top: 30),
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
-      color: Colors.white,
+      color: Clr.lightBlue,
       child: Stack(
         children: [
           Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
-                'പാഠം-$index',
-                style: const TextStyle(
-                  color: Color(0xFFA10A77),
-                  fontSize: 48,
-                  fontFamily: 'Marcellus',
-                  fontWeight: FontWeight.w400,
-                  height: 0,
-                  letterSpacing: 0.48,
+              Center(
+                child: Text(
+                  'പാഠം-$index',
+                  style: const TextStyle(
+                    color: Color(0xFFA10A77),
+                    fontSize: 48,
+                    fontFamily: 'Marcellus',
+                    fontWeight: FontWeight.w400,
+                    height: 0,
+                    letterSpacing: 0.48,
+                  ),
                 ),
               ),
-              const Image(image: Svg('assets/video_page/circle.svg')),
+              // const Image(image: Svg('assets/video_page/circle.svg')),
               // Text(videoUrl),
             ],
           ),

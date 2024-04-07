@@ -1,9 +1,11 @@
 // import 'dart:html';
 import 'dart:io';
+import 'package:brainburst/constants/colors.dart';
 import 'package:brainburst/models/image_process.dart';
 import 'package:brainburst/screens/scanning_pages/scanning_index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_camera/flutter_camera.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:translator/translator.dart';
 
 
@@ -41,7 +43,11 @@ class _CameraPageState extends State<CameraPage> {
                     MaterialPageRoute(
                         builder: (context) => const CameraPreview()));
               },
-              child: const Text('Click here to take a picture'),
+              child: const Icon(
+                Icons.camera_alt,
+                size: 100,
+                color: Colors.black,
+              )
             ),
           ),
         ],
@@ -80,7 +86,7 @@ class _CameraPreviewState extends State<CameraPreview> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: FlutterCamera(
-        color: Colors.amber,
+        color:Clr.mardiGras,
         onImageCaptured: (value) async {
           final path = value.path;
           print("::::::::::::::::::::::::::::::::: $path");
@@ -91,6 +97,7 @@ class _CameraPreviewState extends State<CameraPreview> {
                 return FutureBuilder<String?>(
                   future: ImageProcess().imageProcess(path),
                   builder: (context, snapshot) {
+
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Scaffold(body: Center(
                         
@@ -102,10 +109,16 @@ class _CameraPreviewState extends State<CameraPreview> {
                       objectName = result;
                       translateToMalayalam();
                       return AlertDialog(
+                        backgroundColor: Clr.lightBlue, 
                         content: Column(
                           children: [
                             Image.file(File(path)),
-                            Text("In English: $result"),
+                            Text("In English: $result",style: GoogleFonts.inknutAntiqua( 
+                        color: Clr.darkSpringGreen,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600, 
+                        height: 0,
+                      ),),
                             FutureBuilder<String>(
                               future: translateToMalayalam(),
                               builder: (context, snapshot) {
@@ -114,7 +127,12 @@ class _CameraPreviewState extends State<CameraPreview> {
                                 } else if (snapshot.hasError) {
                                   return Text('Translation Error: ${snapshot.error}');
                                 } else {
-                                  return Text("In Malayalam: ${snapshot.data ?? ''}");
+                                  return Text("In Malayalam: ${snapshot.data ?? ''}",style: GoogleFonts.inknutAntiqua( 
+                        color: Clr.darkSpringGreen,
+                        fontSize: 20, 
+                        fontWeight: FontWeight.w600,
+                        height: 0,
+                      ),);
                                 }
                               },
                             ),

@@ -28,6 +28,16 @@ dependencies:
   speech_to_text: ^6.6.1
   translator: ^1.0.0
   google_ml_kit: ^0.16.3
+  fl_chart: ^0.67.0
+  image: ^3.3.0
+
+  # tflite: ^1.1.2
+  # tflite_flutter: ^0.10.4
+  # tflite_v2: ^1.0.0
+  tflite_flutter: ^0.10.4
+  flutter_animate: ^4.5.0
+  tflite_flutter_helper_plus: ^0.0.2
+  # tflite_flutter_helper_plus: ^0.0.2
 
 
 dev_dependencies:
@@ -71,3 +81,5 @@ flutter:
     - assets/earn_badge/p1.png
     - assets/earn_badge/p2.png
     - assets/scanning_page/ee1.png
+    - assets/models/model.tflite
+    - assets/models/labels.txt

@@ -1,4 +1,5 @@
 import 'package:brainburst/constants/api.dart';
+import 'package:brainburst/constants/colors.dart';
 import 'package:brainburst/models/branch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
@@ -18,14 +19,12 @@ class LearningPage extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
       decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment(0.39, 0.92),
-          end: Alignment(-0.39, -0.92),
-          colors: [Color(0xFFF7D5E5), Color(0x00FA99C8)],
+        color: Clr.lightBlue ,
         ),
-      ),
+       
       child: const Center(
         child: Column(
+
           children: [
             LearningPageLogo(),
             LearningPageImage(),
@@ -227,15 +226,7 @@ class LearningPageContentTile extends StatelessWidget {
   }
 }
 
-class LearningPageContent extends StatefulWidget {
-  const LearningPageContent({super.key});
-
-  @override
-  State<LearningPageContent> createState() => _LearningPageContentState();
-}
-
-class _LearningPageContentState extends State<LearningPageContent> {
-  List<bool> watched = [
+List<bool> watched = [
       false,
       false,
       false,
@@ -252,6 +243,32 @@ class _LearningPageContentState extends State<LearningPageContent> {
       false,
       false
     ];
+
+class LearningPageContent extends StatefulWidget {
+  const LearningPageContent({super.key});
+
+  @override
+  State<LearningPageContent> createState() => _LearningPageContentState();
+}
+
+class _LearningPageContentState extends State<LearningPageContent> {
+  // List<bool> watched = [
+  //     false,
+  //     false,
+  //     false,
+  //     false,
+  //     false,
+  //     false,
+  //     false,
+  //     false,
+  //     false,
+  //     false,
+  //     false,
+  //     false,
+  //     false,
+  //     false,
+  //     false
+  //   ];
   @override
   Widget build(BuildContext context) {
     final branchProvider = context.watch<BranchProvider>();
@@ -278,7 +295,7 @@ class _LearningPageContentState extends State<LearningPageContent> {
       width: 367,
       height: 483,
       decoration: ShapeDecoration(
-        color: Colors.white,
+        color: Clr.airForceBlue,  
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
