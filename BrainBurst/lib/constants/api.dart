@@ -1,5 +1,9 @@
 class Api {
+<<<<<<< HEAD
+  static const String ip = '192.168.17.185';
+=======
   static const String ip = '192.168.1.62';
+>>>>>>> 541fa671d1af4213da2e096a978c1888817eae1f
   static const String baseUrl = 'http://$ip:8000/';  
   static var token = "";         
   static List<Map<String, dynamic>> chapters = []; 
