@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:brainburst/constants/colors.dart';
 import 'package:flutter/material.dart';
 
 enum Player { X, O, computer }
@@ -116,14 +115,15 @@ class _TicTacToePageState extends State<TicTacToePage> {
   }
 
   Widget _buildSquare(int index) {
-    return ElevatedButton(
+    return MaterialButton(
       onPressed: () => _handleTap(index),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Clr.jade,
-        foregroundColor: Colors.black,
-        minimumSize: const Size(50, 50),
+      color: Colors.blue[200],
+      minWidth: 100,
+      height: 100,
+      child: Text(
+        squares[index],
+        style: TextStyle(fontSize: 40),
       ),
-      child: Text(squares[index]),
     );
   }
 
@@ -132,10 +132,13 @@ class _TicTacToePageState extends State<TicTacToePage> {
     String winner = _checkWinner();
 
     return Scaffold(
-      backgroundColor: Clr.lightBlue,
+      backgroundColor: Colors.yellow[100],
       appBar: AppBar(
-        backgroundColor: Clr.lightBlue,
-        title: const Text('Tic Tac Toe'),
+        backgroundColor: Colors.yellow[200],
+        title: Text(
+          'Tic Tac Toe',
+          style: TextStyle(color: Colors.black),
+        ),
       ),
       body: Center(
         child: Column(
@@ -143,54 +146,58 @@ class _TicTacToePageState extends State<TicTacToePage> {
           children: [
             Text(
               winner == ''
-                  ? 'Current Player: $currentPlayer'
+                  ? 'Current Player: ${currentPlayer == Player.X ? "X" : "O"}'
                   : 'Winner: $winner',
-              style: const TextStyle(fontSize: 20),
+              style: TextStyle(fontSize: 20),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 _buildSquare(0),
-                const SizedBox(width: 10),
+                SizedBox(width: 10),
                 _buildSquare(1),
-                const SizedBox(width: 10),
+                SizedBox(width: 10),
                 _buildSquare(2),
               ],
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 _buildSquare(3),
-                const SizedBox(width: 10),
+                SizedBox(width: 10),
                 _buildSquare(4),
-                const SizedBox(width: 10),
+                SizedBox(width: 10),
                 _buildSquare(5),
               ],
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 _buildSquare(6),
-                const SizedBox(width: 10),
+                SizedBox(width: 10),
                 _buildSquare(7),
-                const SizedBox(width: 10),
+                SizedBox(width: 10),
                 _buildSquare(8),
               ],
             ),
-            const SizedBox(height: 20),
-            ElevatedButton(
+            SizedBox(height: 20),
+            MaterialButton(
               onPressed: _resetGame,
-              child: const Text('Reset Game'),
-              style: const ButtonStyle(
-                backgroundColor: MaterialStatePropertyAll(Clr.lightCyan),
-              ),
+              child: Text('Reset Game'),
+              color: Colors.green[300],
             ),
           ],
         ),
       ),
     );
   }
+}
+
+void main() {
+  runApp(MaterialApp(
+    home: TicTacToePage(),
+  ));
 }

@@ -1,9 +1,7 @@
-import 'package:brainburst/constants/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class MCQGame extends StatefulWidget {
-  const MCQGame({super.key});
+  const MCQGame({Key? key}) : super(key: key);
 
   @override
   _MCQGameState createState() => _MCQGameState();
@@ -11,35 +9,18 @@ class MCQGame extends StatefulWidget {
 
 class _MCQGameState extends State<MCQGame> {
   final Map<String, dynamic> _questions = {
-    "പൂജ്യം": {
-      "options": ["1", "2", "0", "3"],
-      "answer": "0"
-    },
-    "പത്തു": {
-      "options": ["10", "11", "12", "13"],
-      "answer": "10"
-    },
-    "പതിനൊന്ന്": {
-      "options": ["11", "12", "13", "14"],
-      "answer": "11"
-    },
-    "പന്ത്രണ്ട്": {
-      "options": ["12", "13", "14", "15"],
-      "answer": "12"
-    },
-    "പതിമൂന്നു": {
-      "options": ["13", "14", "15", "16"],
-      "answer": "13"
-    },
-    "പതിനാറു": {
-      "options": ["14", "15", "16", "17"],
-      "answer": "16"
-    },
+    "പൂജ്യം": {"options": ["1", "2", "0", "3"], "answer": "0"},
+    "പത്തു": {"options": ["10", "11", "12", "13"], "answer": "10"},
+    "പതിനൊന്ന്": {"options": ["11", "12", "13", "14"], "answer": "11"},
+    "പന്ത്രണ്ട്": {"options": ["12", "13", "14", "15"], "answer": "12"},
+    "പതിമൂന്നു": {"options": ["13", "14", "15", "16"], "answer": "13"},
+    "പതിനാറു": {"options": ["14", "15", "16", "17"], "answer": "16"},
   };
 
   int _currentQuestionIndex = 0;
-  int _score = 0;
+  int _score = 1;
   List<String> _questionOrder = [];
+  String? _selectedOption;
 
   @override
   void initState() {
@@ -51,10 +32,17 @@ class _MCQGameState extends State<MCQGame> {
     String currentQuestion = _questionOrder[_currentQuestionIndex];
     String correctAnswer = _questions[currentQuestion]["answer"];
     setState(() {
-      _currentQuestionIndex++;
+      _selectedOption = selectedOption;
       if (selectedOption == correctAnswer) {
         _score++;
       }
+    });
+  }
+
+  void _nextQuestion() {
+    setState(() {
+      _currentQuestionIndex++;
+      _selectedOption = null;
     });
   }
 
@@ -110,43 +98,60 @@ class _MCQGameState extends State<MCQGame> {
     Map<String, dynamic> currentQuestionData = _questions[currentQuestion];
 
     return Scaffold(
-      backgroundColor: Clr.lightBlue,
+      backgroundColor: Colors.lightBlue,
       appBar: AppBar(
-        backgroundColor: Clr.lightBlue,
+        backgroundColor: Colors.lightBlue,
         title: const Text('MCQ Game'),
       ),
       body: Container(
-        color: Clr.lightBlue,
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            children: [
-              Text(
-                currentQuestion,
-                style: GoogleFonts.inknutAntiqua(
-                  color: Clr.darkSpringGreen,
-                  fontSize: 25,
-                  fontWeight: FontWeight.w600,
-                  height: 0,
+        color: Colors.lightBlue,
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  currentQuestion,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              for (String option in currentQuestionData["options"])
-                RadioListTile<String>(
-                  title: Text(
-                    option,
-                    style: GoogleFonts.inknutAntiqua(
-                      color: Clr.darkSpringGreen,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      height: 0,
+                const SizedBox(height: 20),
+                for (String option in currentQuestionData["options"])
+                  Card(
+                    color: _selectedOption == option
+                        ? (option == currentQuestionData["answer"]
+                        ? Colors.green
+                        : Colors.red)
+                        : Colors.white,
+                    child: ListTile(
+                      title: Text(
+                        option,
+                        style: TextStyle(
+                          color: _selectedOption == option
+                              ? Colors.white
+                              : Colors.black,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      onTap: () =>
+                          _handleAnswerSelection(option),
                     ),
                   ),
-                  value: option,
-                  groupValue: _currentQuestionIndex.toString(),
-                  onChanged: (value) => _handleAnswerSelection(value!),
-                ),
-            ],
+                if (_selectedOption != null)
+                  ElevatedButton(
+                    onPressed: _nextQuestion,
+                    child: Text(
+                      _isLastQuestion() ? 'Finish' : 'Next',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  ),
+              ],
+            ),
           ),
         ),
       ),

@@ -10,65 +10,66 @@ import 'dart:convert';
 import 'package:fl_chart/fl_chart.dart';
 
 class ProfilePage extends StatelessWidget {
-  // final String? username;
-  const ProfilePage({super.key});
+  const ProfilePage({Key? key});
 
   @override
   Widget build(BuildContext context) {
-    // Future<String> username = getUser();
-    // fetchData();
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
-
-      // width : double.infinity,
-      // height : double.infinity,
-      decoration: ShapeDecoration(
-        color: Clr.lightBlue,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(25),
-        ),
+      decoration: BoxDecoration(
+        color: Clr.orchidPink,
+        borderRadius: BorderRadius.circular(25),
       ),
       child: Center(
         child: Column(
           children: [
             SizedBox(
-              // width: 297,
               height: 100,
               child: Text(
                 'PROFILE',
-                style: GoogleFonts.inknutAntiqua(
-                  color: Colors.black,
+                style: GoogleFonts.poppins(
+                  color: Clr.darkPurple,
                   fontSize: 42,
                   fontWeight: FontWeight.w700,
-                  height: 0,
                 ),
               ),
             ),
             const Icon(
               Icons.person,
               size: 150,
-              color: Clr.darkPurple, 
+              color: Clr.darkPurple,
             ),
             Text(
-              // Api.token,
               "Username: ${Api.user}",
-              style: const TextStyle(
-                color: Colors.black,
+              style: GoogleFonts.inter(
+                color: Clr.darkPurple,
                 fontSize: 20,
-                fontFamily: 'Inter',
                 fontWeight: FontWeight.w600,
-                height: 0,
               ),
             ),
             Container(
               margin: const EdgeInsets.only(top: 40),
               width: 392,
               height: 264,
-              decoration: ShapeDecoration(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(34),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(34),
+                gradient: LinearGradient(
+                  colors: [
+                    Color(0xFFF1EBEF), // Darker color
+                    Color(0xFFC8A5AA), // Lighter color
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
                 ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.pink.withOpacity(0.3),
+                    spreadRadius: 2,
+                    blurRadius: 7,
+                    offset: Offset(0, 3), // changes position of shadow
+                  ),
+                ],
               ),
               child: Column(
                 children: [
@@ -78,19 +79,8 @@ class ProfilePage extends StatelessWidget {
                       color: Colors.black,
                       fontSize: 20,
                       fontWeight: FontWeight.w600,
-                      height: 0,
                     ),
                   ),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  //   //     scrollDirection: Axis.horizontal,
-                  //   children: [
-                  //     Image.asset('assets/badges/badge1.png'),
-                  //     Image.asset('assets/badges/badge2.png'),
-                  //     Image.asset('assets/badges/badge3.png'),
-                  //     // Image.asset('assets/badges/badge4.png'),
-                  //   ],
-                  // ),
                   const SizedBox(height: 30),
                   Expanded(
                     child: PieChart(
@@ -106,18 +96,24 @@ class ProfilePage extends StatelessWidget {
                 ],
               ),
             ),
+
             Container(
               margin: const EdgeInsets.only(top: 90),
               width: 392,
               height: 78,
-              decoration: ShapeDecoration(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Color(0xFFF1EBEF), // Darker color
+                    Color(0xFFE1BCC1), // Lighter color
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
                 ),
+                borderRadius: BorderRadius.circular(25),
               ),
               child: InkWell(
                 onTap: () {
-                  // Navigator.pop(context);
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
@@ -127,6 +123,7 @@ class ProfilePage extends StatelessWidget {
                   Api().logout();
                 },
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(left: 20, right: 20),
@@ -134,11 +131,10 @@ class ProfilePage extends StatelessWidget {
                     ),
                     Text(
                       'Sign out',
-                      style: GoogleFonts.inknutAntiqua(
+                      style: GoogleFonts.poppins(
                         color: Colors.black,
                         fontSize: 25,
                         fontWeight: FontWeight.w600,
-                        height: 0,
                       ),
                     ),
                   ],
@@ -154,16 +150,12 @@ class ProfilePage extends StatelessWidget {
 
 Future<void> fetchData() async {
   final response =
-      await http.get(Uri.parse('http://192.168.29.218:8000/welcome'));
+  await http.get(Uri.parse('http://192.168.29.218:8000/welcome'));
 
   if (response.statusCode == 200) {
-    // If the server returns a 200 OK response,
-    // then parse the JSON.
     List<dynamic> data = jsonDecode(response.body);
     print(data);
   } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
     throw Exception('Failed to load data');
   }
 }
@@ -174,29 +166,32 @@ List<PieChartSectionData> _generatePieSections(List<bool> watchedStatus) {
 
   List<PieChartSectionData> sections = [];
 
+  // Change the color of the watched section
   sections.add(PieChartSectionData(
-    color: Clr.mossGreen, // Color for watched
+    color: Colors.green, // Change this to the desired color
     value: watchedCount.toDouble(),
     title: 'Watched',
     radius: 15,
     titleStyle: const TextStyle(
       fontSize: 14,
       fontWeight: FontWeight.bold,
-      color: Color(0xffffffff),
+      color: Color(0xff010000),
     ),
   ));
 
+  // Change the color of the unwatched section
   sections.add(PieChartSectionData(
-    color: const Color.fromARGB(80, 137, 157, 120), // Color for unwatched
+    color: Colors.red, // Change this to the desired color
     value: unwatchedCount.toDouble(),
-    title: 'Unwatched', 
+    title: 'Unwatched',
     radius: 15,
     titleStyle: const TextStyle(
       fontSize: 14,
       fontWeight: FontWeight.bold,
-      color: Color(0xffffffff),
+      color: Color(0xff050404),
     ),
   ));
 
   return sections;
 }
+
